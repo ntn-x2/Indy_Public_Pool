@@ -1,0 +1,16 @@
+{
+    "node": {
+        "alias": "Node1",
+        "node_port": 9701,
+        "client_port": 9702,
+        "network": "test",
+        "log_dir": "/Users/diiaablo/Desktop/Indy_Public_Pool/keys/Node1/"
+    },
+    "binding": {
+        "log_out": "/Users/diiaablo/Desktop/Indy_Public_Pool/keys/Node1/",
+        "ledger_out": "/Users/diiaablo/Desktop/Indy_Public_Pool/keys/Node1/",
+        "keys_in": "/Users/diiaablo/Desktop/Indy_Public_Pool/keys",
+        "pool_genesis_in": "/Users/diiaablo/Desktop/Indy_Public_Pool/creator/pool_genesis",
+        "domain_genesis_in": "/Users/diiaablo/Desktop/Indy_Public_Pool/creator/domain_genesis"
+    }
+}

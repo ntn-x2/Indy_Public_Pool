@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+  indy_node:
+    build:
+      context: .
+      cache_from:
+        - sofie/indy-node:1.6.83
+      dockerfile: Dockerfile
+      args:
+        NODE_ALIAS: ${NODE_ALIAS}
+        NODE_SERVER_PORT: ${NODE_SERVER_PORT}
+        NODE_CLIENT_PORT: ${NODE_CLIENT_PORT}
+        NETWORK_NAME: ${NETWORK_NAME}
+    volumes:
+      - ${LOGS_MOUNT_POINT}:/var/log/indy/${NETWORK_NAME}
+      - ${LEDGER_MOUNT_POINT}:/var/lib/indy/${NETWORK_NAME}/data
+      - ${KEYS_PATH}:/var/lib/indy/${NETWORK_NAME}/keys
+      - ${POOL_GENESIS}:/var/lib/indy/${NETWORK_NAME}/pool_transactions_genesis
+      - ${DOMAIN_GENESIS}:/var/lib/indy/${NETWORK_NAME}/domain_transactions_genesis
+    ports:
+      - ${NODE_SERVER_PORT}:${NODE_SERVER_PORT}/tcp
+      - ${NODE_CLIENT_PORT}:${NODE_CLIENT_PORT}/tcp
