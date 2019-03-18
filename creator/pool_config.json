@@ -16,8 +16,8 @@
     ],
     "pool": [
         {
-            "alias": "node1",
-            "keys_folder": ".",
+            "alias": "Node1",
+            "keys_folder": "../keys/Node1",
             "ip": "127.0.0.1",
             "node_port": 9701,
             "client_port": 9702,

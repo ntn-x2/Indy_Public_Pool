@@ -51,7 +51,8 @@ if __name__ == "__main__":
     try:
         delete_all_content(entity_keys_dir)
         with open(logs_file, "w") as logs_file_opened, stdout_redirect(logs_file_opened) as file_stdout:
-            initLocalKeys(args.name, keys_dir, args.seed, override=True, use_bls=False)
+            initLocalKeys(args.name, entity_keys_dir, args.seed, override=True, use_bls=False)
+            print(logs_file_opened.read())
         with open(logs_file, "r") as logs_file_opened:
             print(logs_file_opened.read())
     except Exception as ex:

@@ -51,9 +51,18 @@ if __name__ == "__main__":
     try:
         delete_all_content(entity_keys_dir)
         with open(logs_file, "w") as logs_file_opened, stdout_redirect(logs_file_opened) as file_stdout:
-            initNodeKeysForBothStacks(args.name, keys_dir, args.seed, override=True, use_bls=True)
-        with open(logs_file, "r") as logs_file_opened:
-            print(logs_file_opened.read())
+            initNodeKeysForBothStacks(args.name, entity_keys_dir, args.seed, override=True, use_bls=True)
+
+        with open(logs_file, "r+") as logs_file_opened:
+            def should_consider_line(line, row):
+                print(line, end="")
+                return row > 4 and (line.startswith("Public") or line.startswith("Verification") or line.startswith("BLS Public") or line.startswith("Proof of possession for BLS"))
+
+            filtered_output = [line for (index, line) in enumerate(logs_file_opened.readlines()) if should_consider_line(line, index)]
+
+            logs_file_opened.seek(0)
+            logs_file_opened.write("".join(filtered_output))
+            logs_file_opened.truncate()
     except Exception as ex:
         shutil.rmtree(entity_keys_dir, ignore_errors=True)
         print(ex, file=sys.stderr)
