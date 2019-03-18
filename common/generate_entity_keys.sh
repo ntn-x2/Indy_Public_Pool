@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument("--force", help="If true, new keys override the previous ones.", action="store_true")
     args = parser.parse_args()
 
-    current_directory = os.path.realpath(os.path.join(os.path.realpath(__file__), os.pardir))
+    current_directory = os.path.join(os.path.realpath(__file__), os.pardir)
     parent_directory = os.path.realpath(os.path.join(current_directory, os.pardir))
 
     keys_dir = os.path.join(parent_directory, "keys")

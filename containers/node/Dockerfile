@@ -16,9 +16,4 @@ RUN apt install -y indy-node
 
 
 # Configure node
-
 RUN sed -i "s/NETWORK_NAME = None/NETWORK_NAME = '$NETWORK_NAME'/g" /etc/indy/indy_config.py
-
-
-# Start node
-CMD start_indy_node ${NODE_ALIAS} 0.0.0.0 ${NODE_SERVER_PORT} 0.0.0.0 ${NODE_CLIENT_PORT}

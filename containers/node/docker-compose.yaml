@@ -2,6 +2,7 @@ version: "3.5"
 
 services:
   indy_node:
+    tty: true
     build:
       context: .
       cache_from:
@@ -21,3 +22,4 @@ services:
     ports:
       - ${NODE_SERVER_PORT}:${NODE_SERVER_PORT}/tcp
       - ${NODE_CLIENT_PORT}:${NODE_CLIENT_PORT}/tcp
+    command: ["start_indy_node", "${NODE_ALIAS}", "0.0.0.0", "${NODE_SERVER_PORT}", "0.0.0.0", "${NODE_CLIENT_PORT}"]

@@ -9,10 +9,10 @@ if __name__ == "__main__":
     parser.add_argument("--config-file", required=True, type=str, help="Path to the node configuration JSON file.")
     args = parser.parse_args()
 
-    import json, sys
+    import json, sys, os
 
     try:
-        with open(args.config_file, "r") as config_json_file:
+        with open(os.path.realpath(args.config_file), "r") as config_json_file:
             config_json = json.load(config_json_file)
 
             node_info = config_json["node"]
@@ -31,32 +31,44 @@ if __name__ == "__main__":
         print(e, file=sys.stderr)
         exit()
 
-    import os
-
-    current_directory = os.path.realpath(os.path.join(os.path.realpath(__file__), os.pardir))
+    current_directory = os.path.join(os.path.realpath(__file__), os.pardir)
     parent_directory = os.path.realpath(os.path.join(current_directory, os.pardir))
+    node_directory = os.path.join(parent_directory, "containers", "node")
 
-    docker_compose_file_path = os.path.join(parent_directory, "containers", "node", "docker-compose.yaml")
+    docker_compose_file_path = os.path.join(node_directory, "docker-compose.yaml")
+    docker_compose_env_file_path = os.path.join(node_directory, ".env")
 
-    os.environ["LOGS_MOUNT_POINT"] = log_out_directory
-    os.environ["LEDGER_MOUNT_POINT"] = ledger_out_directory
-    os.environ["KEYS_PATH"] = keys_in_directory
-    os.environ["NODE_ALIAS"] = node_alias
-    os.environ["NODE_SERVER_PORT"] = str(node_server_port)
-    os.environ["NODE_CLIENT_PORT"] = str(node_client_port)
-    os.environ["NETWORK_NAME"] = network_name
-    os.environ["POOL_GENESIS"] = pool_genesis_file
-    os.environ["DOMAIN_GENESIS"] = domain_genesis_file
+    with open(docker_compose_env_file_path, "w") as docker_env_file:
+        docker_env_file.write("LOGS_MOUNT_POINT={}\n".format(os.path.realpath(log_out_directory)))
+        docker_env_file.write("LEDGER_MOUNT_POINT={}\n".format(os.path.realpath(ledger_out_directory)))
+        docker_env_file.write("KEYS_PATH={}\n".format(os.path.realpath(keys_in_directory)))
+        docker_env_file.write("NODE_ALIAS={}\n".format(node_alias))
+        docker_env_file.write("NODE_SERVER_PORT={}\n".format(node_server_port))
+        docker_env_file.write("NODE_CLIENT_PORT={}\n".format(node_client_port))
+        docker_env_file.write("NETWORK_NAME={}\n".format(network_name))
+        docker_env_file.write("POOL_GENESIS={}\n".format(os.path.realpath(pool_genesis_file)))
+        docker_env_file.write("DOMAIN_GENESIS={}".format(os.path.realpath(domain_genesis_file)))
 
-    docker_compose_command = "docker-compose -f {0} up -d".format(docker_compose_file_path)
+    docker_compose_command = "docker-compose -f {0} up -d --remove-orphans".format(docker_compose_file_path)
 
-    # print(docker_compose_command)
-    # print(os.environ)
+    os.chdir(node_directory)
 
     import subprocess
 
-    process = subprocess.Popen(docker_compose_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
+    def execute(cmd):
+        popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        for stdout_line in iter(popen.stdout.readline, ""):
+            yield (stdout_line, None) 
+        popen.stdout.close()
+        return_code = popen.wait()
+        if return_code:
+            yield (None, subprocess.CalledProcessError(return_code, cmd))
 
-    print("Output: {}".format(output))
-    print("Error: {}".format(error))
+    for (output, error) in execute(docker_compose_command.split()):
+        if output is not None:
+            print(output, end="")
+        else:
+            print(error, end="")
+
+    # print("Output: {}".format(output))
+    # print("Error: {}".format(error))
