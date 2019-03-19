@@ -17,7 +17,9 @@
     "pool": [
         {
             "alias": "Node1",
-            "keys_folder": "../keys/Node1",
+            "verkey": "4m9mxH5bzMw7dyJKHUdjhREb8c7mGLxJCVFMDjrYJ1PZ",
+            "bls_key": "4m9mxH5bzMw7dyJKHUdjhREb8c7mGLxJCVFMDjrYJ1PZ",
+            "pop_bls_key": "4m9mxH5bzMw7dyJKHUdjhREb8c7mGLxJCVFMDjrYJ1PZ",
             "ip": "127.0.0.1",
             "node_port": 9701,
             "client_port": 9702,
