@@ -2,27 +2,19 @@
 
 if __name__ == "__main__":
 
-    import argparse
-    
-    parser = argparse.ArgumentParser(description="Generate keys for a TRUSTEE or a STEWARD by taking a name and an optional seed for the keys generation.")
+    import os, json, re, sys
+    from hashlib import sha256
 
-    parser.add_argument("--name", required=True, type=str, help="Entity name, e.g., Trustee1.")
-    parser.add_argument("--seed", required=False, type=str, help="Seed for the key generation. Defaults to a random one.")
-    parser.add_argument("--force", help="If true, new keys override the previous ones.", action="store_true")
-    args = parser.parse_args()
-    
-    import os
+    sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
+    import utils
 
-    current_directory = os.path.realpath(os.path.join(os.path.realpath(__file__), os.pardir))
-    pool_config_file = os.path.join(current_directory, "pool_config.json")
-    pool_transaction_file_path = os.path.join(current_directory, "pool_transactions_genesis")
-    domain_transaction_file_path  = os.path.join(current_directory, "domain_transactions_genesis")
+    pool_config_file = os.path.join(utils.get_creator_directory(), "pool_config.json")
+    pool_transaction_file = os.path.join(utils.get_creator_directory(), "pool_transactions_genesis")
+    domain_transaction_file = os.path.join(utils.get_creator_directory(), "domain_transactions_genesis")
 
     # Read json config file
     with open(pool_config_file, "r") as pool_config:
-        # Parse config files
-        import json
-        
+        # Parse config files    
         pool_config_json = json.load(pool_config)
 
         domain_info = pool_config_json["domain"]
@@ -38,12 +30,10 @@ if __name__ == "__main__":
             if d_alias is not None:
                 nym_transaction_payload["alias"] = d_alias
             nym_transaction = {"reqSignature": {}, "txn": {"data": nym_transaction_payload, "metadata": {} if d_creator is None else {"from": d_creator}, "type": "1"}, "txnMetadata": {"seqNo": index+1}, "ver": "1"}
+            nym_entities_transactions.append(nym_transaction)
             
         pool_info = pool_config_json["pool"]
         node_entities_transactions = []
-
-        import re
-        from hashlib import sha256
 
         for index, p_info in enumerate(pool_info):
             p_alias = p_info["alias"]
@@ -72,10 +62,10 @@ if __name__ == "__main__":
                     node_transaction["txn"]["metadata"] = {"from": p_steward_did}
                 node_entities_transactions.append(node_transaction)
         
-        with open(domain_transaction_file_path, "w") as domain_transactions:
+        with open(domain_transaction_file, "w") as domain_transactions:
             for nym_transaction in nym_entities_transactions:
                 domain_transactions.write(json.dumps(nym_transaction) + "\n")
         
-        with open(pool_transaction_file_path, "w") as pool_transactions:
+        with open(pool_transaction_file, "w") as pool_transactions:
             for node_transaction in node_entities_transactions:
                 pool_transactions.write(json.dumps(node_transaction) + "\n" )

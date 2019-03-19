@@ -2,14 +2,15 @@
 
 if __name__ == "__main__":
 
-    import argparse
+    import argparse, json, sys, os
+
+    sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
+    import utils
 
     parser = argparse.ArgumentParser(description="Start a node in the network with the given parameters.")
 
     parser.add_argument("--config-file", required=True, type=str, help="Path to the node configuration JSON file.")
     args = parser.parse_args()
-
-    import json, sys, os
 
     try:
         with open(os.path.realpath(args.config_file), "r") as config_json_file:
@@ -29,11 +30,9 @@ if __name__ == "__main__":
             domain_genesis_file = bind_info["domain_genesis_in"]
     except Exception as e:
         print(e, file=sys.stderr)
-        exit()
+        exit(1)
 
-    current_directory = os.path.join(os.path.realpath(__file__), os.pardir)
-    parent_directory = os.path.realpath(os.path.join(current_directory, os.pardir))
-    node_directory = os.path.join(parent_directory, "containers", "node")
+    node_directory = os.path.join(utils.get_containers_directory(), "node")
 
     docker_compose_file_path = os.path.join(node_directory, "docker-compose.yaml")
     docker_compose_env_file_path = os.path.join(node_directory, ".env")
@@ -51,24 +50,12 @@ if __name__ == "__main__":
 
     docker_compose_command = "docker-compose -f {0} up -d --remove-orphans".format(docker_compose_file_path)
 
-    os.chdir(node_directory)
+    os.chdir(node_directory)            #Needed by docker-compose to read the .env file
 
-    import subprocess
-
-    def execute(cmd):
-        popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
-        for stdout_line in iter(popen.stdout.readline, ""):
-            yield (stdout_line, None) 
-        popen.stdout.close()
-        return_code = popen.wait()
-        if return_code:
-            yield (None, subprocess.CalledProcessError(return_code, cmd))
-
-    for (output, error) in execute(docker_compose_command.split()):
+    for (output, error) in utils.execute_asynchronous_cmd(docker_compose_command.split()):
         if output is not None:
             print(output, end="")
         else:
             print(error, end="")
-
-    # print("Output: {}".format(output))
-    # print("Error: {}".format(error))
+    
+    os.remove(docker_compose_env_file_path)
