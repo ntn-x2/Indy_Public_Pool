@@ -62,7 +62,7 @@ if __name__ == "__main__":
             logs_file_opened.write("Verification key: \t\t\t\t{}\n".format(verkey))
             if is_node:
                 logs_file_opened.write("BLS key: \t\t\t\t\t\t{}\n".format(bls_key))
-                logs_file_opened.write("BLS key proof-of-possession: \t{}".format(pop_bls_key))
+                logs_file_opened.write("BLS key proof-of-possession: \t{}\n".format(pop_bls_key))
     except Exception as ex:
         print(colored(ex, "red"), file=sys.stderr)
         exit(3)
