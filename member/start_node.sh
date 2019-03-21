@@ -6,7 +6,6 @@ if __name__ == "__main__":
 
     sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
     import utils
-    from termcolor import colored
 
     parser = argparse.ArgumentParser(description="Start a node in the network with the given parameters.")
 
@@ -31,10 +30,10 @@ if __name__ == "__main__":
                 pool_genesis_file = bind_info["pool_genesis_in"]
                 domain_genesis_file = bind_info["domain_genesis_in"]
             except Exception as ex:
-                print(colored(ex, "red"), file=sys.stderr)
+                utils.print_error(ex)
                 exit(1)
     except Exception as ex:
-        print(colored(ex, "red"), file=sys.stderr)
+        utils.print_error(ex)
         exit(2)
 
     node_directory = os.path.join(utils.get_containers_directory(), "node")
@@ -68,7 +67,7 @@ if __name__ == "__main__":
             docker_env_file.write("POOL_GENESIS={}\n".format(os.path.realpath(pool_genesis_file)))
             docker_env_file.write("DOMAIN_GENESIS={}".format(os.path.realpath(domain_genesis_file)))
     except Exception as ex:
-        print(colored(ex, "red"), file=sys.stderr)
+        utils.print_error(ex)
         exit(3)
 
     docker_compose_command = "docker-compose -f {0} up -d --remove-orphans".format(docker_compose_file_path)
@@ -76,14 +75,14 @@ if __name__ == "__main__":
     try:
         os.chdir(node_directory)            #Needed by docker-compose to read the .env file
     except Exception as ex:
-        print(colored(ex, "red"), file=sys.stderr)
+        utils.print_error(ex)
         exit(4)
 
     for (output, error) in utils.execute_asynchronous_cmd(docker_compose_command.split()):
         if output is not None:
             print(output, end="")
         else:
-            print(colored(error, "red"), end="")
+            utils.print_error(error)
     
     try:
         os.remove(docker_compose_env_file_path)

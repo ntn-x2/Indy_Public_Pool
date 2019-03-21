@@ -4,7 +4,6 @@ if __name__ == "__main__":
 
     import os, json, re, sys
     from hashlib import sha256
-    from termcolor import colored
 
     sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
     import utils
@@ -19,16 +18,16 @@ if __name__ == "__main__":
             try:
                 pool_config_json = json.load(pool_config)
             except Exception as ex:
-                print(colored("Config file is not in JSON format. Please verify the content of the file. Error: {}".format(ex), "red"), file=sys.stderr)
+                utils.print_error("Config file is not in JSON format. Please verify the content of the file. Error: {}".format(ex))
                 exit(1)
     except Exception as ex:
-        print(colored(ex, "red"), file=sys.stderr)
+        utils.print_error(ex)
         exit(2)
 
     try:
         domain_info = pool_config_json["domain"]
     except Exception as ex:
-        print(colored("Config file does not contain the top-level key \"domain\". Please verify the content of the file. Error: {}".format(ex), "red"), file=sys.stderr)
+        utils.print_error("Config file does not contain the top-level key \"domain\". Please verify the content of the file. Error: {}".format(ex))
         exit(3)
 
     nym_entities_transactions = []
@@ -50,13 +49,13 @@ if __name__ == "__main__":
             nym_transaction = {"reqSignature": {}, "txn": {"data": nym_transaction_payload, "metadata": {} if d_creator is None else {"from": d_creator}, "type": "1"}, "txnMetadata": {"seqNo": index+1}, "ver": "1"}
             nym_entities_transactions.append(nym_transaction)
         except Exception as ex:
-            print(colored("Syntax error in domain transaction n. {}. Please verify the content of the file. Error: {}".format(index+1, ex), "red"), file=sys.stderr)
+            utils.print_error("Syntax error in domain transaction n. {}. Please verify the content of the file. Error: {}".format(index+1, ex))
             exit(4)
         
     try:
         pool_info = pool_config_json["pool"]
     except Exception as ex:
-        print(colored("Config file does not contain the top-level key \"pool\". Please verify the content of the file. Error: {}".format(ex), "red"), file=sys.stderr)
+        utils.print_error("Config file does not contain the top-level key \"pool\". Please verify the content of the file. Error: {}".format(ex))
         exit(5)
 
     node_entities_transactions = []
@@ -78,7 +77,7 @@ if __name__ == "__main__":
 
             node_entities_transactions.append(node_transaction)
         except Exception as ex:
-            print(colored("Syntax error in pool transaction n. {}. Please verify the content of the file. Error: {}".format(index+1, ex), "red"), file=sys.stderr)
+            utils.print_error("Syntax error in pool transaction n. {}. Please verify the content of the file. Error: {}".format(index+1, ex))
             exit(6)
     
     try:
@@ -90,5 +89,5 @@ if __name__ == "__main__":
             for node_transaction in node_entities_transactions:
                 pool_transactions.write(json.dumps(node_transaction) + "\n" )
     except Exception as ex:
-        print(colored(ex, "red"), file=sys.stderr)
+        utils.print_error(ex)
         exit(7)
