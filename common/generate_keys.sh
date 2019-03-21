@@ -33,7 +33,7 @@ if __name__ == "__main__":
     if args.role.upper() not in {"TRUSTEE", "STEWARD", "NODE"}:
         print(colored("Invalid role specified. Please select one of \"TRUSTEE\", \"STEWARD\" or \"NODE\"", "red"), file=sys.stderr)
         exit(1)
-
+ 
     is_node = args.role.upper() not in {"TRUSTEE", "STEWARD"}
 
     # Redirect output of called functions (base58-encoded pub and verkey) to a file, and then prints the content of the file.
@@ -54,19 +54,20 @@ if __name__ == "__main__":
     pub_key = hexToFriendly(pub_key)
     verkey = hexToFriendly(verkey)
 
+    output = ""
+    output += "Name: \t\t\t\t{}\n".format(args.name)
+    output += "Public key: \t\t\t{}\n".format(pub_key)
+    output += "Verification key: \t\t{}\n".format(verkey)
+    if is_node:
+        output += "BLS key: \t\t\t{}\n".format(bls_key)
+        output += "BLS key proof-of-possession: \t{}\n".format(pop_bls_key)
+
     try:
         with open(logs_file, "w+") as logs_file_opened:
-            logs_file_opened.seek(0)
-            logs_file_opened.write("Name: \t\t\t\t\t\t\t{}\n".format(args.name))
-            logs_file_opened.write("Public key: \t\t\t\t\t{}\n".format(pub_key))
-            logs_file_opened.write("Verification key: \t\t\t\t{}\n".format(verkey))
-            if is_node:
-                logs_file_opened.write("BLS key: \t\t\t\t\t\t{}\n".format(bls_key))
-                logs_file_opened.write("BLS key proof-of-possession: \t{}\n".format(pop_bls_key))
+            logs_file_opened.write(output)
     except Exception as ex:
         print(colored(ex, "red"), file=sys.stderr)
         exit(3)
             
-    print(colored("Seed used: \t\t{}".format(seed_to_use), "green"))
-    print("Public key: \t\t{}".format(pub_key))
-    print("Verification key: \t{}".format(verkey))
+    print(colored("Seed used: \t\t\t{}".format(seed_to_use), "green"))
+    print(output)
