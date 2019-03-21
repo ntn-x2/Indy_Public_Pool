@@ -42,10 +42,24 @@ if __name__ == "__main__":
     docker_compose_file_path = os.path.join(node_directory, "docker-compose.yaml")
     docker_compose_env_file_path = os.path.join(node_directory, ".env")
 
+    log_out_directory = os.path.realpath(log_out_directory)
+    ledger_out_directory = os.path.realpath(ledger_out_directory)
+
+    # Create directories to contain outputs of Indy Node container
+    try:
+        os.makedirs(log_out_directory)
+    except:
+        pass
+
+    try:
+        os.makedirs(ledger_out_directory)
+    except:
+        pass
+
     try:
         with open(docker_compose_env_file_path, "w") as docker_env_file:
-            docker_env_file.write("LOGS_MOUNT_POINT={}\n".format(os.path.realpath(log_out_directory)))
-            docker_env_file.write("LEDGER_MOUNT_POINT={}\n".format(os.path.realpath(ledger_out_directory)))
+            docker_env_file.write("LOGS_MOUNT_POINT={}\n".format(log_out_directory))
+            docker_env_file.write("LEDGER_MOUNT_POINT={}\n".format(ledger_out_directory))
             docker_env_file.write("KEYS_PATH={}\n".format(os.path.realpath(keys_in_directory)))
             docker_env_file.write("NODE_ALIAS={}\n".format(node_alias))
             docker_env_file.write("NODE_SERVER_PORT={}\n".format(node_server_port))
