@@ -3,8 +3,7 @@
         "alias": "Node",
         "node_port": 9701,
         "client_port": 9702,
-        "network": "test",
-        "log_dir": "../keys/Node1/"
+        "network": "test"
     },
     "binding": {
         "log_out": "../keys/Node1/",
