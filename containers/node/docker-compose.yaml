@@ -13,6 +13,7 @@ services:
         NODE_SERVER_PORT: ${NODE_SERVER_PORT}
         NODE_CLIENT_PORT: ${NODE_CLIENT_PORT}
         NETWORK_NAME: ${NETWORK_NAME}
+    restart: always
     volumes:
       - ${LOGS_MOUNT_POINT}:/var/log/indy/${NETWORK_NAME}
       - ${LEDGER_MOUNT_POINT}:/var/lib/indy/${NETWORK_NAME}/data
