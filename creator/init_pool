@@ -1,31 +1,31 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 if __name__ == "__main__":
 
-    import os, json, re, sys
+    import os, yaml, json, re, sys
     from hashlib import sha256
 
     sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
     import utils
 
-    pool_config_file = os.path.join(utils.get_creator_directory(), "pool_config.json")
+    pool_config_file = os.path.join(utils.get_creator_directory(), "pool_config.yaml")
     pool_transaction_file = os.path.join(utils.get_creator_directory(), "pool_transactions_genesis")
     domain_transaction_file = os.path.join(utils.get_creator_directory(), "domain_transactions_genesis")
 
-    # Read json config file
+    # Read YAML config file
     try:
         with open(pool_config_file, "r") as pool_config:
             try:
-                pool_config_json = json.load(pool_config)
+                pool_config_yaml = yaml.load(pool_config, Loader=yaml.FullLoader)
             except Exception as ex:
-                utils.print_error("Config file is not in JSON format. Please verify the content of the file. Error: {}".format(ex))
+                utils.print_error("Config file is not in YAML format. Please verify the content of the file. Error: {}".format(ex))
                 exit(1)
     except Exception as ex:
         utils.print_error(ex)
         exit(2)
 
     try:
-        domain_info = pool_config_json["domain"]
+        domain_info = pool_config_yaml["domain"]
     except Exception as ex:
         utils.print_error("Config file does not contain the top-level key \"domain\". Please verify the content of the file. Error: {}".format(ex))
         exit(3)
@@ -53,7 +53,7 @@ if __name__ == "__main__":
             exit(4)
         
     try:
-        pool_info = pool_config_json["pool"]
+        pool_info = pool_config_yaml["pool"]
     except Exception as ex:
         utils.print_error("Config file does not contain the top-level key \"pool\". Please verify the content of the file. Error: {}".format(ex))
         exit(5)

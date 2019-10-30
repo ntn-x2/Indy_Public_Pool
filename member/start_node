@@ -1,29 +1,29 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 if __name__ == "__main__":
 
-    import argparse, json, sys, os
+    import argparse, yaml, sys, os
 
     sys.path.insert(0, os.path.realpath(os.path.join(os.path.pardir, "utils", "internal")))
     import utils
 
     parser = argparse.ArgumentParser(description="Start a node in the network with the given parameters.")
 
-    parser.add_argument("--config-file", required=True, type=str, help="Path to the node configuration JSON file.")
+    parser.add_argument("--config-file", required=True, type=str, help="Path to the node configuration YAML file.")
     args = parser.parse_args()
 
     try:
-        with open(os.path.realpath(args.config_file), "r") as config_json_file:
+        with open(os.path.realpath(args.config_file), "r") as config_yaml_file:
             try:
-                config_json = json.load(config_json_file)
+                config_yaml = yaml.load(config_yaml_file, Loader=yaml.FullLoader)
 
-                node_info = config_json["node"]
+                node_info = config_yaml["node"]
                 node_alias = node_info["alias"]
                 node_server_port = node_info["node_port"]
                 node_client_port = node_info["client_port"]
                 network_name = node_info["network"]
 
-                bind_info = config_json["binding"]
+                bind_info = config_yaml["binding"]
                 log_out_directory = bind_info["log_out"]
                 ledger_out_directory = bind_info["ledger_out"]
                 keys_in_directory = bind_info["keys_in"]

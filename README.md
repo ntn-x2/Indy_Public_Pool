@@ -52,7 +52,7 @@ _Agreements about which partners should have TRUSTEE priviledges and which partn
 This step must be perfomed only by the entity responsible to generate the needed genesis transactions files. This can be done once all the partners have sent their own `keys.out` files.
 
 1. (OPTIONAL) If the network creator did not generate any keys and did not install the dependencies, these can be installed now in the same way described in point 1 of the key material generation process description (above). But since _this process relies exclusively on Pyhton3 system packages, it can be executed on any OS with a default Python3 installation._
-2. Open `/creator/pool_config.json` for modifications (replacing the current templated content). **For each `keys.out` file received**:
+2. Open `/creator/pool_config.yaml` for modifications (replacing the current templated content). **For each `keys.out` file received**:
     - if the key belongs to a TRUSTEE or STEWARD, then in the `domain` section add the following information:
         - `alias`: the name of the entity, as specified in the file
         - `did`: the public key of the entity, as specified in the file
@@ -77,7 +77,7 @@ These two files need now to be sent back to the partners involved. Again, the fi
 
 Once a partner has received the `domain_transactions_genesis` and `pool_transactions_genesis` files, it can start the process to join the network. This is done by building and starting a Docker container with the proper two ports exposed, one for node-to-node and one for node-to-client communication. **In order to do this, also [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) and [Docker-Compose](https://docs.docker.com/compose/install/) need to be installed on the host machine and must be executable by non-root users (see the [post-installations steps](https://docs.docker.com/install/linux/linux-postinstall/) for a step-by-step process).**
 
-1. Open `/member/node_config.json` for modifications (replacing the current templated content):
+1. Open `/member/node_config.yaml` for modifications (replacing the current templated content):
     - `node` section contains info about the node itself that will be running in the Docker container.
         - `alias`: the name of the node. Mainly used as name for log and internal config files.
         - `node_port`: the port the node will be using to communicate with other nodes. **Must be the same port specified during the genesis transaction generation for this node.**

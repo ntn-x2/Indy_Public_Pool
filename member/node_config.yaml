@@ -1,0 +1,12 @@
+---
+node:
+  alias: Node
+  node_port: 9701
+  client_port: 9702
+  network: test
+binding:
+  log_out: "../keys/Node1/"
+  ledger_out: "../keys/Node1/"
+  keys_in: "../keys"
+  pool_genesis_in: "../creator/pool_genesis"
+  domain_genesis_in: "../creator/domain_genesis"
