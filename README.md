@@ -36,7 +36,9 @@ This is the first step in the pool setup process. In this step, all the entities
 2. Keys generation: move back to the `common` folder. Here, depending on the agreements among the different entities involved, keys for TRUSTEEs, STEWARDs and NODEs can be generated. So, for instance, if a partners wishes to join the network as TRUSTEE but also wishes to have its own validator node, he needs to generate keys for TRUSTEE, STEWARD (the only entity that can add a NODE), and NODE.
 
 `./generate_keys --name <TRUSTEE_ENTITY_NAME> --role TRUSTEE [--seed <SEED>] [--force]`
+
 `./generate_keys --name <STEWARD_ENTITY_NAME> --role STEWARD [--seed <SEED>] [--force]`
+
 `./generate_keys --name <NODE_ENTITY_NAME> --role NODE [--seed <SEED>] [--force]`
 
 These lines will generate keys for a TRUSTEE, a STEWARD and a NODE entity. The keys are saved in the `/keys/<TRUSTEE_ENTITY_NAME>`, `/keys/<STEWARD_ENTITY_NAME>`, and `/keys/<NODE_ENTITY_NAME>` respectively.
