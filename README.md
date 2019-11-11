@@ -1,10 +1,10 @@
-# Indy_Testbed_Setup
+# Indy Distributed Testbed Setup
 
-A series of scripts to ease the setup of an [Indy](https://www.hyperledger.org/projects/hyperledger-indy) pool, that can run either locally or over the Internet.
+A series of scripts to ease the setup of an [Indy](https://www.hyperledger.org/projects/hyperledger-indy) pool that can run either locally or over the Internet.
 
 ## Purpose
 
-The purpose of the repo is to allow entities and/or organizations to setup a shared network of trustees, stewards and nodes (according to prior agreements) in a very intuitive manner.
+The purpose of the repo is to allow entities and/or organizations to setup a shared network of trustees, stewards and nodes (according to prior agreements) in a straightforward manner.
 
 The final result is a pool of validator nodes run in Docker containers, that produce content (e.g., logs and ledger data) available to the host machine through volumes mounting.
 
@@ -32,7 +32,7 @@ The following subsections describe the whole process of setting up an Indy netwo
 
 This is the first step in the pool setup process. In this step, all the entities that want to join the initial network need to produce keys and send it to the network creator through some external channel. **Since only public information is exchanged, it is enough to ensure authentication and integrity of the data exchanged.** This process must be performed by all the parties willing to join the network, including the network creator, if so agreed.
 
-1. Install dependencies: move to the `utils` folder and run `./setup_deps`. This will take care of installing all the needed dependencies, e.g., `pip3` and `indy-node` executables.
+1. Install dependencies: move to the `utils` folder and run `./setup_deps`. This will take care of installing all the needed dependencies, e.g., `pip3` and `indy-node` binaries.
 2. Keys generation: move back to the `common` folder. Here, depending on the agreements among the different entities involved, keys for TRUSTEEs, STEWARDs and NODEs can be generated. So, for instance, if a partners wishes to join the network as TRUSTEE but also wishes to have its own validator node, he needs to generate keys for TRUSTEE, STEWARD (the only entity that can add a NODE), and NODE.
 
 `./generate_keys --name <TRUSTEE_ENTITY_NAME> --role TRUSTEE [--seed <SEED>] [--force]`
