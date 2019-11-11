@@ -32,12 +32,12 @@ The following subsections describe the whole process of setting up an Indy netwo
 
 This is the first step in the pool setup process. In this step, all the entities that want to join the initial network need to produce keys and send it to the network creator through some external channel. **Since only public information is exchanged, it is enough to ensure authentication and integrity of the data exchanged.** This process must be performed by all the parties willing to join the network, including the network creator, if so agreed.
 
-1. Install dependencies: move to the `utils` folder and run `./setup_deps.sh`. This will take care of installing all the needed dependencies, e.g., `pip3` and `indy-node` executables.
+1. Install dependencies: move to the `utils` folder and run `./setup_deps`. This will take care of installing all the needed dependencies, e.g., `pip3` and `indy-node` executables.
 2. Keys generation: move back to the `common` folder. Here, depending on the agreements among the different entities involved, keys for TRUSTEEs, STEWARDs and NODEs can be generated. So, for instance, if a partners wishes to join the network as TRUSTEE but also wishes to have its own validator node, he needs to generate keys for TRUSTEE, STEWARD (the only entity that can add a NODE), and NODE.
 
-`./generate_keys.sh --name <TRUSTEE_ENTITY_NAME> --role TRUSTEE [--seed <SEED>] [--force]`
-`./generate_keys.sh --name <STEWARD_ENTITY_NAME> --role STEWARD [--seed <SEED>] [--force]`
-`./generate_keys.sh --name <NODE_ENTITY_NAME> --role NODE [--seed <SEED>] [--force]`
+`./generate_keys --name <TRUSTEE_ENTITY_NAME> --role TRUSTEE [--seed <SEED>] [--force]`
+`./generate_keys --name <STEWARD_ENTITY_NAME> --role STEWARD [--seed <SEED>] [--force]`
+`./generate_keys --name <NODE_ENTITY_NAME> --role NODE [--seed <SEED>] [--force]`
 
 These lines will generate keys for a TRUSTEE, a STEWARD and a NODE entity. The keys are saved in the `/keys/<TRUSTEE_ENTITY_NAME>`, `/keys/<STEWARD_ENTITY_NAME>`, and `/keys/<NODE_ENTITY_NAME>` respectively.
 
@@ -67,7 +67,7 @@ This step must be perfomed only by the entity responsible to generate the needed
         - `node_port`: the port used by the node when communicating with other validator nodes. _Recommended value is **9701**._
         - `client_port`: the port used by the node when communicating with clients. _Recommended value is **9702**._
         - `steward_did`: the public key of the STEWARD owner of this node. The information can be found in the `keys.out` file relative to the STEWARD. **It is not possible to add a node without adding its STEWARD owner to the pool as well.** Make sure that the STEWARD's `did` and the NODE's `steward_did` match.
-3. Once all the entities have been added to the pool configuration file, run `./init-pool.sh`.
+3. Once all the entities have been added to the pool configuration file, run `./init-pool`.
 
 When the script completes, the same directory will now contain both `domain_transactions_genesis` and `pool_transactions_genesis` files. These are the only files that allow other nodes to join the pool. The `pool_transactions_genesis` file is also responsible to allow clients to connect to and query the ledger.
 
