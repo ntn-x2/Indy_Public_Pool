@@ -5,8 +5,8 @@ node:
   client_port: 9702
   network: test
 binding:
-  log_out: "../keys/Node1/"
-  ledger_out: "../keys/Node1/"
+  log_out: "../log/"
+  ledger_out: "../ledger/"
   keys_in: "../keys"
-  pool_genesis_in: "../creator/pool_genesis"
-  domain_genesis_in: "../creator/domain_genesis"
+  pool_genesis_in: "../pool_transactions_genesis"
+  domain_genesis_in: "../domain_transactions_genesis"

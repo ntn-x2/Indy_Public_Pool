@@ -3,10 +3,10 @@ version: "3.5"
 services:
   indy_node:
     tty: true
+    image: sofie/indy-node:1.6.83
+    container_name: indy-node
     build:
       context: .
-      cache_from:
-        - sofie/indy-node:1.6.83
       dockerfile: Dockerfile
       args:
         NODE_ALIAS: ${NODE_ALIAS}
