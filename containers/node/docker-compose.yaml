@@ -3,7 +3,7 @@ version: "3.5"
 services:
   indy_node:
     tty: true
-    image: sofie/indy-node:1.6.83
+    image: sofie/indy-node:1.12.2
     container_name: indy-node
     build:
       context: .

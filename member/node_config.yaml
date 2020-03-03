@@ -3,7 +3,7 @@ node:
   alias: Node
   node_port: 9701
   client_port: 9702
-  network: test
+  network: SOFIE
 binding:
   log_out: "../log/"
   ledger_out: "../ledger/"
