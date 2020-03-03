@@ -12,7 +12,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68DB5E88
 RUN apt install -y apt-transport-https
 RUN bash -c 'echo "deb https://repo.sovrin.org/deb xenial stable" >> /etc/apt/sources.list'
 RUN apt update
-RUN apt install -y indy-node=1.12.1
+RUN apt install -y indy-node=1.12.2
 
 
 # Configure node
