@@ -3,10 +3,10 @@ node:
   alias: Node
   node_port: 9701
   client_port: 9702
-  network: SOFIE
+  network: test
 binding:
   log_out: "../log/"
   ledger_out: "../ledger/"
-  keys_in: "../keys"
+  keys_in: "../keys/Node"
   pool_genesis_in: "../pool_transactions_genesis"
   domain_genesis_in: "../domain_transactions_genesis"
